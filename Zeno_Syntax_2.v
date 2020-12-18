@@ -8,7 +8,12 @@ Require Import Nat.
 
 (**** Data Types ****)
 
+
+
+
 (*** Basic Types ***)
+
+
 
 (** Natural Numbers **)
 
@@ -21,6 +26,7 @@ Coercion nrNat: nat >-> Nat.
 
 Check nrNat 5.
 
+
 (** Boolean Values **)
 
 Inductive Bool : Type :=
@@ -31,6 +37,7 @@ Scheme Equality for Bool.
 Coercion valBool: bool >-> Bool.
 
 Check valBool true.
+
 
 (** Character Strings **)
 
@@ -43,7 +50,10 @@ Coercion sString: string >-> String.
 
 Check sString "PLP".
 
+
 (*** Complex Data Types ***)
+
+
 
 (** Linked Lists **)
 
@@ -72,6 +82,7 @@ Check [true >b false >b true].
 Notation "'[' A '>s' .. '>s' B ']'" := (list String A .. (list String B []) ..).
 Check ["P" >s "L" >s "P"].
 
+
 (** Arrays (built on lists) **)
 
 Inductive Array : Type :=
@@ -96,6 +107,7 @@ Notation "'MA' L" := (multipleArray L) (at level 90).
 Definition multipleArrayNBS := MA (list Array natArray123 (list Array boolArrayTFT (list Array stringArrayPLP []))).
 Check multipleArrayNBS.
 
+
 (** Enums (built on lists) **)
 
 Inductive EnumTypes : Type :=
@@ -117,6 +129,7 @@ Check [[ 4 >e true >e "PLP" ]].
 
 Definition enum0isF := EN [[0 >e "is" >e false]].
 Check enum0isF.
+
 
 (** Structs (built on lists) **)
 
@@ -161,7 +174,11 @@ Notation "'ST' L" := (struct L) (at level 80).
 Definition struct1 := ST fieldList.
 Check struct1.
 
+
 (**** Collective Data Type ****)
+
+
+
 
 Inductive ResultTypes : Type :=
 | nrNats (n: Nat)
@@ -182,6 +199,9 @@ Coercion lists: List >-> ResultTypes.
 Coercion arrays: Array >-> ResultTypes.
 Coercion enums: Enum >-> ResultTypes.
 Coercion structs: Struct >-> ResultTypes.
+
+
+
 
 (**** Expression Syntax ****)
 
@@ -270,7 +290,13 @@ Check (true ||' false).
 Check ("abc" ++' "def").
 (*Check (natArray123 +>' natArray123).*)
 
+
+
+
 (**** Statement Syntax ****)
+
+
+
 
 Inductive Pair (T1 T2 : Type) : Type :=
 | pair (t1: T1) (t2: T2). 
@@ -391,7 +417,12 @@ Inductive Statement : Type :=
 | switchCase: string -> List (Pair Nat Statement) -> Statement
 .
 
+
+
+
 (*** Instruction Notations ***)
+
+
 
 (** Variables: Declare, Assign, Initialize **)
 
@@ -403,9 +434,10 @@ Notation "X '<n-' V" := (asnNatVar X V) (at level 50).
 Notation "X '<b-' V" := (asnBoolVar X V) (at level 50).
 Notation "X '<s-' V" := (asnStringVar X V) (at level 50).
 
-Notation "'NLet' X '::' V" := (initNatVar X V) (at level 50).
-Notation "'BLet' X '::' V" := (initBoolVar X V) (at level 50).
-Notation "'SLet' X '::' V" := (initStringVar X V) (at level 50).
+Notation "'NLet' X ':n:' V" := (initNatVar X V) (at level 50).
+Notation "'BLet' X ':b:' V" := (initBoolVar X V) (at level 50).
+Notation "'SLet' X ':s:' V" := (initStringVar X V) (at level 50).
+
 
 (** Lists: Declare, Initialize, Assign, Insert, Append, Delete, Trim, Get **)
 
@@ -413,13 +445,13 @@ Notation "'NLst' V" := (decNatList V) (at level 50).
 Notation "'BLst' V" := (decBoolList V) (at level 50).
 Notation "'SLst' V" := (decStringList V) (at level 50).
 
-Notation "'LetNLst' V '::' L" := (initNatList V L) (at level 50).
-Notation "'LetBLst' V '::' L" := (initBoolList V L) (at level 50).
-Notation "'LetSLst' V '::' L" := (initStringList V L) (at level 50).
+Notation "'LetNLst' V ':<n>:' L" := (initNatList V L) (at level 50).
+Notation "'LetBLst' V ':<b>:' L" := (initBoolList V L) (at level 50).
+Notation "'LetSLst' V ':<s>:' L" := (initStringList V L) (at level 50).
 
-Notation "A ':n:' B" := (asnNatList A B) (at level 50).
-Notation "A ':b:' B" := (asnBoolList A B) (at level 50).
-Notation "A ':s:' B" := (asnStringList A B) (at level 50).
+Notation "A ':<n:' B" := (asnNatList A B) (at level 50).
+Notation "A ':<b:' B" := (asnBoolList A B) (at level 50).
+Notation "A ':<s:' B" := (asnStringList A B) (at level 50).
 
 Notation "A 'insNat' <' B '> <' C '>" := (insNatInList A B C) (at level 50).
 Notation "A 'insBool' <' B '> <' C '>" := (insBoolInList A B C) (at level 50).
@@ -437,7 +469,8 @@ Notation "A 'trNat'" := (trNatList A) (at level 50).
 Notation "A 'trBool'" := (trBoolList A) (at level 50).
 Notation "A 'trString'" := (trStringList A) (at level 50).
 
-Notation "A 'listGet' <' B '>" := (gtFromList A B) (at level 50).
+Notation "A '<<' B '>>'" := (gtFromList A B) (at level 50).
+
 
 (** Arrays: Declare, Initialize, Assign, Set, Push (Front/Back), Pop (Front/Back), Get **)
 
@@ -446,15 +479,15 @@ Notation "'BArr' V" := (decBoolArray V) (at level 50).
 Notation "'SArr' V" := (decStringArray V) (at level 50).
 Notation "'MArr' V" := (decMultipleArray V) (at level 50).
 
-Notation "'LetNArr' V '::' L" := (initNatArray V L) (at level 50).
-Notation "'LetBArr' V '::' L" := (initBoolArray V L) (at level 50).
-Notation "'LetSArr' V '::' L" := (initStringArray V L) (at level 50).
-Notation "'LetMArr' V '::' L" := (initMultipleArray V L) (at level 50).
+Notation "'LetNArr' V ':[n]:' L" := (initNatArray V L) (at level 50).
+Notation "'LetBArr' V ':[b]:' L" := (initBoolArray V L) (at level 50).
+Notation "'LetSArr' V ':[s]:' L" := (initStringArray V L) (at level 50).
+Notation "'LetMArr' V ':[a]:' L" := (initMultipleArray V L) (at level 50).
 
-Notation "A ':[n]:' B" := (asnNatArray A B) (at level 50).
-Notation "A ':[b]:' B" := (asnBoolArray A B) (at level 50).
-Notation "A ':[s]:' B" := (asnStringArray A B) (at level 50).
-Notation "A ':[a]:' B" := (asnMultipleArray A B) (at level 50).
+Notation "A ':[n:' B" := (asnNatArray A B) (at level 50).
+Notation "A ':[b:' B" := (asnBoolArray A B) (at level 50).
+Notation "A ':[s:' B" := (asnStringArray A B) (at level 50).
+Notation "A ':[a:' B" := (asnMultipleArray A B) (at level 50).
 
 Notation "X [' N '] '<n-' V" := (stArrayNat X N V) (at level 50).
 Notation "X [' B '] '<b-' V" := (stArrayBool X B V) (at level 50).
@@ -481,11 +514,14 @@ Notation "V '<-b'" := (ppBackArrayBool V) (at level 50).
 Notation "V '<-s'" := (ppBackArrayString V) (at level 50).
 Notation "V '<-a'" := (ppBackArrayArray V) (at level 50).
 
-Notation "X '[[' N ']]'" := (gtArrayValue X N) (at level 50).
+Notation "X [[' N ']]" := (gtArrayValue X N) (at level 50).
+
+
+(** Enums: Declare, Initialize, Assign, Push Front/Back, Pop Front/Back, Set, Get **)
 
 Notation "'dEnum' E" := (decEnum E) (at level 50).
-Notation "'LetEnum' E L" := (initEnum E L) (at level 50).
-Notation "A ':[e]:' B" := (asnEnum A B) (at level 50).
+Notation "'LetEnum' E :[e]: L" := (initEnum E L) (at level 50).
+Notation "A ':[e:' B" := (asnEnum A B) (at level 50).
 
 Notation "V '>+e' N" := (pshFrontEnum V N) (at level 50).
 Notation "V '<+e' N" := (pshBackEnum V N) (at level 50).
@@ -493,12 +529,18 @@ Notation "V '>-e'" := (ppFrontEnum V) (at level 50).
 Notation "V '<-e'" := (ppBackEnum V) (at level 50).
 
 Notation "X [' E '] '<e-' V" := (stEnum X E V) (at level 50).
-Notation "X '[<' N '>]'" := (gtEnum X N) (at level 50).
+Notation "X '[)' N '(]'" := (gtEnum X N) (at level 50).
 
-Notation "'LetStruct' X L" := (initStruct X L) (at level 50).
-Notation "A ':{s}:' B" := (asnStruct A B) (at level 50).
-Notation "X /' F '\" := (gtStructField X F) (at level 50).
-Notation "X \' F '/ V" := (stStructField X F V) (at level 50).
+
+(** Structs: Initialize, Assign, Get, Set **)
+
+Notation "'LetStruct' X :{s}: L" := (initStruct X L) (at level 50).
+Notation "A ':{s:' B" := (asnStruct A B) (at level 50).
+Notation "X '{/' F '\}'" := (gtStructField X F) (at level 50).
+Notation "X '{\' F '/}' V" := (stStructField X F V) (at level 50).
+
+
+(** Instructions: Decisional, Repetitive, Sequences, Iteration Manipulators **)
 
 Notation "'If' '(' A ')' 'Then' '{' S '}' 'EndIfThen'" := (ifThen A S) (at level 50).
 Notation "'If' '(' A ')' 'Then' '{' S1 '}' 'Else' '{' S2 '}' 'EndIfThenElse'" := (ifThenElse A S1 S2) (at level 55).
@@ -515,6 +557,75 @@ Definition casePair := pair Nat Statement.
 Notation "'case' X ':->' S" := (casePair X S) (at level 45).
 Notation "'{\' C1 ';;/' .. ';;/' C2 '/}'" := (list casePair C1 .. (list casePair C2 []) ..) (at level 45). 
 Notation "'switch' '(' X ')' C" := (switchCase X C) (at level 50).
+
+
+(*** Example Statements ***)
+
+
+
+(** Variables: Declare, Assign, Initialize **)
+
+Check (NVar "x") ;; (BVar "y") ;; (SVar "z").
+
+Check ("x" <n- 3) ;; ("y" <b- true) ;; ("z" <s- "z").
+
+Check (NLet "x" :n: 3) ;; (BLet "y" :b: false) ;; (SLet "z" :s: "z").
+
+
+(** Lists: Declare, Initialize, Assign, Insert, Append, Delete, Trim, Get **)
+
+Check (NLst "x") ;; (BLst "y") ;; (SLst "z").
+
+Check (LetNLst "x" :<n>: [1 >n 2 >n 3]) ;; (LetBLst "y" :<b>: [true >b true]) ;; (LetSLst "z" :<s>: ["P" >s "L" >s "P"]).
+
+Check ("x1" :<n: "x2") ;; ("y1" :<b: "y2") ;; ("z1" :<s: "z2").
+
+Check ("x" insNat<'0'><'1'>) ;; ("y" insBool<'1'><' true '>) ;; ("z" insString<'2'><'"z"'>).
+
+Check ("x" +n+ [1 >n 2]) ;; ("y" +b+ [true >b false]) ;; ("z" +s+ ["1" >s "0"]).
+
+Check ("x" delNat <'1'>) ;; ("y" delBool <'1'>) ;; ("z" delString <'1'>).
+
+Check ("x" trNat) ;; ("y" trBool) ;; ("z" trString).
+
+Check ("x" << 1 >>) ;; ("y" << 1 >>) ;; ("z" << 1 >>).
+
+
+(** Arrays: Declare, Initialize, Assign, Set, Push (Front/Back), Pop (Front/Back), Get **)
+
+Check (NArr "x") ;; (BArr "y") ;; (SArr "z") ;; (MArr "t").
+
+Check (LetNArr "x" :[n]: natArray123) ;; (LetBArr "y" :[b]: boolArrayTFT) ;; (LetSArr "z" :[s]: stringArrayPLP) ;; (LetMArr "t" :[a]: multipleArrayNBS).
+
+Check ("x1" :[n: "x2") ;; ("y1" :[b: "y2") ;; ("z1" :[s: "z2") ;; ("t1" :[a: "t2").
+
+Check ("x"['2'] <n- 3) ;; ("y"['2'] <b- true) ;; ("z"['2'] <s- "3") ;; ("t"['2'] <a- natArray123).
+
+Check ("x" >+n 1) ;; ("y" >+b true) ;; ("z" >+s "z") ;; ("t" >+a natArray123).
+
+Check ("x" <+n 1) ;; ("y" <+b true) ;; ("z" <+s "z") ;; ("t" <+a natArray123).
+
+Check ("x" >-n) ;; ("y" >-b) ;; ("z" >-s) ;; ("t" >-a).
+Check ("x" <-n) ;; ("y" <-b) ;; ("z" <-s) ;; ("t" <-a).
+
+Check ("x" [['2']]) ;; ("y" [['2']]) ;; ("z"[['2']]) ;; ("t"[['2']]).
+
+
+(** Enums: Declare, Initialize, Assign, Push Front/Back, Pop Front/Back, Set, Get **)
+
+Check (dEnum "e") ;; (LetEnum "d" :[e]: enum0isF ) ;; ("e" :[e: "d").
+
+Check ("e" >+e 4) ;; ("e" <+e true) ;; ("e" >-e) ;; ("e" <-e).
+
+Check ("e"['2'] <e- 2) ;; ("e"[)2(]).
+
+
+(** Structs: Initialize, Assign, Get, Set **)
+
+Check (LetStruct "x" :{s}: struct1) ;; ("x1" :{s: "x2") ;; ("x" {/"f1"\}) ;; ("x" {\"f2"/} 7).
+
+
+
 
 (**** Semantics ****) (** Unorganized **)
 
@@ -949,16 +1060,3 @@ match exp with
 | s smul n => tsmul (Exp_Eval s env) (Exp_Eval n env)
 (*| arrvar a => a *)
 end.
-
-
-
-
-
-
-
-
-
-
-
-
-
